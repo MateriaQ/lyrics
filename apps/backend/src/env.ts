@@ -49,6 +49,9 @@ const EnvSchema = t.Object({
   // App Base Prefix
   BASE_PATH: BasePathSchema,
 
+  // Health check secret
+  HEALTH_SECRET: t.String({ minLength: 32 }),
+
   // Auth
   AUTH_SECRET: t.String({ minLength: 32 }),
   AUTH_BASE_URL: t.String({ format: "uri" }),

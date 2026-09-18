@@ -2,6 +2,14 @@ import { auth } from "@/auth";
 
 let _schema: ReturnType<typeof auth.api.generateOpenAPISchema>;
 const getSchema = async () => (_schema ??= auth.api.generateOpenAPISchema());
+
+const healthTokenAuthScheme = {
+  type: "apiKey",
+  in: "header",
+  name: "x-health-token",
+  description: "Health authentication token",
+} as const;
+
 export const OpenAPI = {
   getPaths: (prefix = "/auth") =>
     getSchema().then(({ paths }) => {
@@ -16,5 +24,15 @@ export const OpenAPI = {
       }
       return reference;
     }) as Promise<any>,
-  components: getSchema().then(({ components }) => components) as Promise<any>,
+  getComponents: async () => {
+    const { components } = (await getSchema()) as any;
+
+    return {
+      ...components,
+      securitySchemes: {
+        ...components.securitySchemes,
+        healthTokenAuth: healthTokenAuthScheme,
+      },
+    };
+  },
 } as const;

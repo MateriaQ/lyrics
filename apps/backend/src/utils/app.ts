@@ -9,7 +9,7 @@ import { HTTP_CODES, HTTP_PHRASES } from "@/lib/http";
 
 import { auth } from "@/auth";
 import type { Permission } from "@/auth/permissions";
-import { OpenAPI } from "@/auth/openapi";
+import { OpenAPI } from "@/openapi";
 
 import {
   rateLimit as elysiaRateLimit,
@@ -217,7 +217,7 @@ export const createApp = async <Prefix extends string = "">(config?: ElysiaConfi
       openapi({
         path: "/docs",
         documentation: {
-          components: await OpenAPI.components,
+          components: await OpenAPI.getComponents(),
           paths: await OpenAPI.getPaths(),
           info: {
             title: "MateriaQ",

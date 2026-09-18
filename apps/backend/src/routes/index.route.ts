@@ -1,5 +1,20 @@
 import { t } from "elysia";
-import { createRouter } from "@/utils/app";
+import { createRouter, ratelimit } from "@/utils/app";
+import { HTTP_CODES } from "@/lib/http";
+import { getReadyz } from "@/routes/index.controller";
+
+const HealthResponse = t.Object({
+  status: t.Union([t.Literal("ok"), t.Literal("error")]),
+  services: t.Record(t.String(), t.Union([t.Literal("up"), t.Literal("down")])),
+});
+
+const UnauthorizedResponse = t.Object({
+  status: t.Literal("error"),
+  error: t.Object({
+    code: t.Literal("UNAUTHORIZED"),
+    message: t.String(),
+  }),
+});
 
 export const indexRouter = createRouter({ name: "root" })
   .get("/", ({ redirect }) => redirect("/api/docs", "302"), {
@@ -8,10 +23,35 @@ export const indexRouter = createRouter({ name: "root" })
       tags: ["System"],
     },
   })
-  .get("/ping", () => "pong", {
+  .get("/healthz", async ({ status }) => status(HTTP_CODES.OK), {
     detail: {
-      summary: "Heartbeat",
+      summary: "Health Check",
       tags: ["System"],
     },
-    response: t.String(),
-  });
+  })
+  .use(
+    ratelimit({
+      duration: 10_000,
+      max: 8,
+      scoping: "scoped",
+    }),
+  )
+  .get(
+    "/readyz",
+    async ({ headers, status }) => {
+      const { code, response } = await getReadyz(headers["x-health-token"]);
+      return status(code, response);
+    },
+    {
+      response: {
+        [HTTP_CODES.OK]: HealthResponse,
+        [HTTP_CODES.SERVICE_UNAVAILABLE]: HealthResponse,
+        [HTTP_CODES.UNAUTHORIZED]: UnauthorizedResponse,
+      },
+      detail: {
+        summary: "Readiness Check",
+        tags: ["System"],
+        security: [{ healthTokenAuth: [] }],
+      },
+    },
+  );
