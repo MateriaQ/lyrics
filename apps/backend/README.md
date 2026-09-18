@@ -12,6 +12,7 @@
   <p>
     <a href="../../LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-66558E?labelColor=332F38" alt="License: AGPL-3.0"></a>
     <a href="https://lyrics.materiaq.org/api"><img src="https://img.shields.io/badge/API-Live-D0BCFE?labelColor=332F38" alt="API"></a>
+    <a href="https://status.materiaq.org/monitors/lyrics-api"><img src="https://status.materiaq.org/badge/lyrics-api/status?labelColor=332F38&color=D0BCFE" alt="Lyrics API status"></a>
   </p>
 </div>
 
@@ -20,3 +21,7 @@
 ### ✦ Overview
 
 The lyrics API is live at **[https://lyrics.materiaq.org/api](https://lyrics.materiaq.org/api)**, aggregating lyrics from multiple providers behind a single endpoint.
+
+### ✦ Status & Uptime
+
+Live metrics and incident reporting are tracked via the [Lyrics API Monitor](https://status.materiaq.org/monitors/lyrics-api).
