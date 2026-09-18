@@ -1,26 +1,31 @@
-# Arabic Transliteration
+<div align="center">
 
-Convert Arabic script (Arabic, Farsi, Urdu) to romanized Latin text.
+  <h1>Materia<span style="color: #d0bcfe;">Q</span> Arabic Romanizer</h1>
 
-## Features
+  <p><strong>TypeScript library for transliterating Arabic script to Latin</strong></p>
 
-- Supports Arabic, Farsi, and Urdu transliteration
-- Handles diacritical marks and special characters
-- Proper spacing after punctuation
+  <p>
+    <a href="./LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-66558E?labelColor=332F38" alt="License: AGPL-3.0"></a>
+    <a href="./package.json"><img src="https://img.shields.io/badge/Package-@romanizer%2Farabic-D0BCFE?labelColor=332F38" alt="@romanizer/arabic"></a>
+  </p>
+</div>
 
-## Usage
+---
+
+### ✦ Overview
+
+Converts Arabic script (Arabic, Farsi, Urdu) to romanized Latin text. Handles diacritical marks, special characters and proper spacing after punctuation.
+
+### ✦ Usage
 
 ```typescript
-import { arabicRomanize } from "arabic-transliteration";
+import { romanizeArabic } from "@romanizer/arabic";
 
-arabicRomanize("مرحبا");
-// Output: "marḥaba"
-
-arabicRomanize("الله");
-// Output: "Allāh"
+romanizeArabic("مرحبا"); // "marḥaba"
+romanizeArabic("الله"); // "Allāh"
 ```
 
-## Acknowledgements
+### ✦ Acknowledgements
 
 Based on work from:
 

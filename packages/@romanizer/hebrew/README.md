@@ -1,22 +1,29 @@
-# Hebrew Transliteration
+<div align="center">
 
-A TypeScript library for transliterating Hebrew text to Latin characters.
+  <h1>Materia<span style="color: #d0bcfe;">Q</span> Hebrew Romanizer</h1>
 
-## Features
+  <p><strong>TypeScript library for transliterating Hebrew to Latin</strong></p>
 
-- Transliterate Hebrew words and text to Latin characters
-- Syllable separation options
+  <p>
+    <a href="./LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-66558E?labelColor=332F38" alt="License: AGPL-3.0"></a>
+    <a href="./package.json"><img src="https://img.shields.io/badge/Package-@romanizer%2Fhebrew-D0BCFE?labelColor=332F38" alt="@romanizer/hebrew"></a>
+  </p>
+</div>
 
-## Usage
+---
+
+### ✦ Overview
+
+Transliterates Hebrew text to Latin characters with a configurable [`Schema`](./src/schema.ts) and optional syllable separation.
+
+### ✦ Usage
 
 ```typescript
-import transliterate from "hebrew-transliteration";
+import { romanize } from "@romanizer/hebrew";
 
-transliterate("ישראל"); // "Yisrāʾēl"
-transliterate("ירושלים"); // "Yerushalayim"
-transliterate("תּוֹרָה"); // "ṯōrâ"
+romanize("רַעַל"); // "raʿal"
 ```
 
-## Acknowledgements
+### ✦ Acknowledgements
 
-Based on [havarotjs](https://github.com/hebrew-transliteration/havarotjs/)
+Based on [havarotjs](https://github.com/hebrew-transliteration/havarotjs).

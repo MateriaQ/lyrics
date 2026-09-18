@@ -1,23 +1,26 @@
-# Urdu Transliteration
+<div align="center">
 
-A TypeScript library for transliterating Urdu text to Latin characters.
+  <h1>Materia<span style="color: #d0bcfe;">Q</span> Urdu Romanizer</h1>
 
-## Features
+  <p><strong>TypeScript library for transliterating Urdu to Latin</strong></p>
 
-- Transliterate Urdu words and text to Latin characters
-- Special handling for Islamic terms and common phrases
+  <p>
+    <a href="./LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-66558E?labelColor=332F38" alt="License: AGPL-3.0"></a>
+    <a href="./package.json"><img src="https://img.shields.io/badge/Package-@romanizer%2Furdu-D0BCFE?labelColor=332F38" alt="@romanizer/urdu"></a>
+  </p>
+</div>
 
-## Usage
+---
+
+### ✦ Overview
+
+Transliterates Urdu text to Latin characters with special handling for Islamic terms and common phrases.
+
+### ✦ Usage
 
 ```typescript
-import romanizeUrdu from "urdu-transliteration";
+import { romanizeUrdu } from "@romanizer/urdu";
 
 romanizeUrdu("ہم"); // "hum"
-romanizeUrdu("وہ"); // "woh"
-romanizeUrdu("یہ"); // "yeh"
 romanizeUrdu("السلام علیکم"); // "Assalamu Alaikum"
 ```
-
-## Acknowledgements
-
-Based on standard Urdu transliteration conventions.

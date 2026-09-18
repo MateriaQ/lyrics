@@ -1,26 +1,30 @@
-# Armenian Transliteration
+<div align="center">
 
-A TypeScript library for transliterating Armenian text to Latin characters.
+  <h1>Materia<span style="color: #d0bcfe;">Q</span> Armenian Romanizer</h1>
 
-## Features
+  <p><strong>TypeScript library for transliterating Armenian to Latin</strong></p>
 
-- Transliterate Armenian words and text to Latin characters
-- Preserve original casing (lowercase, uppercase, title case)
-- Handle Armenian ligatures (ﬓ, ﬔ, ﬕ, ﬖ, ﬗ)
-- Convert Armenian punctuation to English equivalents
-- Process mixed text with both Armenian and non-Armenian characters
+  <p>
+    <a href="./LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-66558E?labelColor=332F38" alt="License: AGPL-3.0"></a>
+    <a href="./package.json"><img src="https://img.shields.io/badge/Package-@romanizer%2Farmenian-D0BCFE?labelColor=332F38" alt="@romanizer/armenian"></a>
+  </p>
+</div>
 
-## Usage
+---
+
+### ✦ Overview
+
+Transliterates Armenian words and text to Latin characters. Preserves original casing (lowercase, uppercase, title case), expands Armenian ligatures (ﬓ, ﬔ, ﬕ, ﬖ, ﬗ), converts Armenian punctuation to English equivalents and processes mixed text.
+
+### ✦ Usage
 
 ```typescript
-import transliterate from "armenian-transliteration";
+import { romanizeArmenian } from "@romanizer/armenian";
 
-transliterate("Հայաստան"); // "Hayastan"
-transliterate("ԲԱՐԵՓՈԽՈՒՄ"); // "BAREPXUM"
-transliterate("ողջույն, աշխարհ"); // "vołčyun, ašxarh"
+romanizeArmenian("Հայաստան"); // "Hayastan"
+romanizeArmenian("ողջույն, աշխարհ"); // "vołčyun, ašxarh"
 ```
 
-## Acknowledgements
+### ✦ Acknowledgements
 
-Based on
-[lobotomoe/armenian-transliteration](https://github.com/lobotomoe/armenian-transliteration/)
+Based on [lobotomoe/armenian-transliteration](https://github.com/lobotomoe/armenian-transliteration).
