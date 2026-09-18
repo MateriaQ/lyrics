@@ -1,0 +1,68 @@
+{
+  "name": "materiaq-workspace",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "workspaces": {
+    "catalog": {
+      "better-auth": "1.6.11",
+      "elysia": "1.4.28"
+    },
+    "catalogs": {
+      "build": {
+        "tsdown": "0.21.10"
+      },
+      "linting": {
+        "oxfmt": "0.66.0",
+        "oxlint": "1.81.0",
+        "oxlint-tsgolint": "7.0.2001"
+      },
+      "romanization": {
+        "cyrillic-romanization": "1.2.2"
+      },
+      "testing": {
+        "vitest": "5.0.1"
+      },
+      "types": {
+        "@types/bun": "1.4.1",
+        "typescript": "7.0.2"
+      }
+    },
+    "packages": [
+      "apps/*",
+      "packages/*",
+      "packages/@romanizer/*"
+    ]
+  },
+  "type": "module",
+  "scripts": {
+    "build": "turbo build",
+    "build:backend": "turbo build --filter=@materiaq/lyrics-api",
+    "build:frontend": "turbo build --filter=@materiaq/lyrics-web",
+    "build:packages": "turbo build --filter='./packages/@romanizer/*'",
+    "check": "oxfmt --check && oxlint",
+    "dev": "bun run infra && turbo dev --filter=./apps/*",
+    "dev:backend": "bun run infra && turbo dev --filter=@materiaq/lyrics-api",
+    "dev:frontend": "turbo dev --filter=@materiaq/lyrics-web",
+    "fmt": "oxfmt",
+    "infra": "docker compose up -d",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "preview": "bun run build && bun run start",
+    "start": "NODE_ENV=production bun run --bun ./dist/index.js",
+    "test": "turbo test -- --run",
+    "test:watch": "turbo test",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:types",
+    "@workspace/typescript-config": "workspace:*",
+    "husky": "9.1.7",
+    "oxfmt": "catalog:linting",
+    "oxlint": "catalog:linting",
+    "oxlint-tsgolint": "catalog:linting",
+    "turbo": "2.10.12",
+    "typescript": "6.0.3",
+    "vitest": "catalog:testing"
+  },
+  "packageManager": "bun@1.4.2"
+}

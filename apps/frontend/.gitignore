@@ -1,0 +1,8 @@
+# build outputs
+.svelte-kit/
+.output/
+.vercel/
+.netlify/
+.wrangler/
+build/
+vite.config.*.timestamp-*

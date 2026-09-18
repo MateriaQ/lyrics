@@ -1,0 +1,11 @@
+[env]
+file = true
+
+[install]
+exact = true
+minimumReleaseAge = 259200 # seconds
+minimumReleaseAgeExcludes = []
+
+[run]
+silent = true
+elide-lines = 0

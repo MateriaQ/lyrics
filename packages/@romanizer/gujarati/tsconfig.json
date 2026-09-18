@@ -1,0 +1,9 @@
+{
+  "extends": "@workspace/typescript-config/base",
+  "compilerOptions": {
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "test"]
+}

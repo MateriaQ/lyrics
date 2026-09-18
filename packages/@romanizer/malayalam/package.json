@@ -1,0 +1,26 @@
+{
+  "name": "@romanizer/malayalam",
+  "version": "0.0.1-alpha.1",
+  "license": "AGPL-3.0-or-later",
+  "author": "Sanooj E Sanish <mail@sanooj.uk>",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:types",
+    "tsdown": "catalog:build",
+    "vitest": "catalog:testing"
+  },
+  "peerDependencies": {
+    "typescript": "catalog:types"
+  }
+}

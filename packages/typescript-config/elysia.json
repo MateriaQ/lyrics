@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Elysia",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "types": ["bun"],
+    "jsx": "react-jsx"
+  }
+}

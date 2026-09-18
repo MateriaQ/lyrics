@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-secondary: var(--secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  --color-surface-variant: var(--surface-variant);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-background: var(--background);
+  --color-on-background: var(--on-background);
+  --font-sans: "Poppins", system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  color-scheme: light dark;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.light,
+:root:not(.dark) {
+  --primary: rgb(102 85 142);
+  --surface-tint: rgb(102 85 142);
+  --on-primary: rgb(255 255 255);
+  --primary-container: rgb(233 221 255);
+  --on-primary-container: rgb(77 61 117);
+  --secondary: rgb(98 91 112);
+  --on-secondary: rgb(255 255 255);
+  --secondary-container: rgb(232 222 248);
+  --on-secondary-container: rgb(74 68 88);
+  --tertiary: rgb(126 82 95);
+  --on-tertiary: rgb(255 255 255);
+  --tertiary-container: rgb(255 217 226);
+  --on-tertiary-container: rgb(99 59 72);
+  --background: rgb(254 247 255);
+  --on-background: rgb(29 27 32);
+  --surface: rgb(254 247 255);
+  --on-surface: rgb(29 27 32);
+  --surface-variant: rgb(231 224 235);
+  --on-surface-variant: rgb(73 69 78);
+  --surface-container-low: rgb(248 241 250);
+  --surface-container: rgb(242 236 244);
+  --surface-container-high: rgb(236 230 238);
+  --surface-container-highest: rgb(230 224 233);
+  --inverse-surface: rgb(50 47 53);
+  --inverse-on-surface: rgb(245 239 247);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --primary: rgb(208 188 254);
+    --surface-tint: rgb(208 188 254);
+    --on-primary: rgb(55 38 93);
+    --primary-container: rgb(77 61 117);
+    --on-primary-container: rgb(233 221 255);
+    --secondary: rgb(204 194 219);
+    --on-secondary: rgb(51 45 65);
+    --secondary-container: rgb(74 68 88);
+    --on-secondary-container: rgb(232 222 248);
+    --tertiary: rgb(240 184 199);
+    --on-tertiary: rgb(74 37 49);
+    --tertiary-container: rgb(99 59 72);
+    --on-tertiary-container: rgb(255 217 226);
+    --background: rgb(20 18 24);
+    --on-background: rgb(230 224 233);
+    --surface: rgb(20 18 24);
+    --on-surface: rgb(230 224 233);
+    --surface-variant: rgb(73 69 78);
+    --on-surface-variant: rgb(202 196 207);
+    --surface-container-low: rgb(29 27 32);
+    --surface-container: rgb(33 31 36);
+    --surface-container-high: rgb(43 41 47);
+    --surface-container-highest: rgb(54 52 58);
+    --inverse-surface: rgb(230 224 233);
+    --inverse-on-surface: rgb(50 47 53);
+  }
+}
+
+.dark {
+  --primary: rgb(208 188 254) !important;
+  --surface-tint: rgb(208 188 254) !important;
+  --on-primary: rgb(55 38 93) !important;
+  --primary-container: rgb(77 61 117) !important;
+  --on-primary-container: rgb(233 221 255) !important;
+  --secondary: rgb(204 194 219) !important;
+  --on-secondary: rgb(51 45 65) !important;
+  --secondary-container: rgb(74 68 88) !important;
+  --on-secondary-container: rgb(232 222 248) !important;
+  --tertiary: rgb(240 184 199) !important;
+  --on-tertiary: rgb(74 37 49) !important;
+  --tertiary-container: rgb(99 59 72) !important;
+  --on-tertiary-container: rgb(255 217 226) !important;
+  --background: rgb(20 18 24) !important;
+  --on-background: rgb(230 224 233) !important;
+  --surface: rgb(20 18 24) !important;
+  --on-surface: rgb(230 224 233) !important;
+  --surface-variant: rgb(73 69 78) !important;
+  --on-surface-variant: rgb(202 196 207) !important;
+  --surface-container-low: rgb(29 27 32) !important;
+  --surface-container: rgb(33 31 36) !important;
+  --surface-container-high: rgb(43 41 47) !important;
+  --surface-container-highest: rgb(54 52 58) !important;
+  --inverse-surface: rgb(230 224 233) !important;
+  --inverse-on-surface: rgb(50 47 53);
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(140% at var(--theme-button-cord, 50% 50%));
+  }
+  to {
+    clip-path: circle(0% at var(--theme-button-cord, 50% 50%));
+  }
+}
+
+::view-transition-old(changing-theme) {
+  animation: 380ms var(--ease-in-out) both theme-reveal;
+  z-index: 10;
+}
+
+::view-transition-new(changing-theme) {
+  animation: none;
+  z-index: 9;
+}
+
+@keyframes pulse-glow {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(126, 82, 95, 0.6);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(126, 82, 95, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(126, 82, 95, 0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite ease-out;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--on-background);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  padding: clamp(1rem, 3.5vw, 2.75rem) clamp(0.75rem, 3vw, 1.75rem);
+  line-height: 1.5;
+  overflow-x: hidden;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}

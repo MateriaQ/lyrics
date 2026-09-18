@@ -1,0 +1,5 @@
+{
+  "extends": "@workspace/typescript-config/base",
+  "include": ["vite.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

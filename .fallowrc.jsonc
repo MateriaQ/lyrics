@@ -1,0 +1,54 @@
+{
+  // This file is JSONC: fallow reads these comments; generic JSON tools may not.
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "entry": ["src/index.{ts,tsx,js,jsx}", "src/main.{ts,tsx,js,jsx}"],
+  "ignorePatterns": [
+    "apps/frontend/**",
+    "packages/@romanizer/hebrew/*",
+    "apps/backend/src/lib/http/http-status*.ts",
+    "test-project/**",
+  ],
+  "ignoreFindings": ["apps/backend/drizzle-auth.config.ts"],
+  "ignoreDependencies": ["oxfmt"],
+  "workspaces": {
+    "patterns": ["apps/*", "packages/@romanizer/*"],
+  },
+  "plugins": ["vite", "bun", "oxlint", "typescript", "drizzle", "tailwind", "tsdown", "nitropack"],
+  "duplicates": {
+    // Hide pair-only clones; focus on widespread copy-paste
+    // worth refactoring. Lower to 2 to report every duplicate pair.
+    "minOccurrences": 3,
+    // Common additions (uncomment to enable):
+    // "ignore": [
+    //   "**/lib/**",          // for repos that publish transpiled output to lib/
+    //   "**/legacy/**",       // for repos with legacy-build artifacts
+    //   "**/__generated__/**", // Relay, GraphQL Code Generator
+    //   "**/generated/**"     // OpenAPI, Protobuf codegen
+    // ]
+  },
+  "rules": {
+    "unused-dependencies": "warn",
+  },
+  "ignoreExports": [
+    {
+      "file": "apps/backend/src/lib/lyrics/romanize.ts",
+      "exports": ["*"],
+    },
+    {
+      "file": "apps/backend/src/lib/spicy/types.ts",
+      "exports": ["*"],
+    },
+    {
+      "file": "apps/backend/src/lib/language/romanizer/chinese/index.ts",
+      "exports": ["*"],
+    },
+    {
+      "file": "apps/backend/src/lib/language/romanizer/japanese/index.ts",
+      "exports": ["*"],
+    },
+    {
+      "file": "apps/backend/src/lib/language/romanizer/korean/index.ts",
+      "exports": ["*"],
+    },
+  ],
+}

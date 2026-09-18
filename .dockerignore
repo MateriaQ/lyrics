@@ -1,0 +1,36 @@
+# Dependencies and build artifacts
+node_modules
+dist
+build
+.out
+.next
+*.tsbuildinfo
+
+# Version control & Docker
+.git
+.gitignore
+.dockerignore
+Dockerfile*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs & temp files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+**/*.log
+
+# Operating system & IDE
+.DS_Store
+.idea
+.vscode
+
+# Archives and dumps
+**/*.zip
+**/*.tar.gz
+**/*.tgz
+/coverage

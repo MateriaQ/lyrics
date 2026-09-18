@@ -1,0 +1,137 @@
+import { describe, expect, it } from "vitest";
+import { parseSpotifyLyrics } from "@/lib/spotify/getLyrics";
+
+describe("parseSpotifyLyrics", () => {
+  describe("When syncType is LINE_SYNCED", () => {
+    it("parses synced lyrics into a line structure and calculates start/end times", () => {
+      const mockLyrics = {
+        syncType: "LINE_SYNCED",
+        lines: [
+          { startTimeMs: "1000", words: "Hello" },
+          { startTimeMs: "2000", words: "world" },
+          { startTimeMs: "3000", words: "this is a test", endTimeMs: "4000" },
+        ],
+      };
+
+      const result = parseSpotifyLyrics(mockLyrics as never);
+
+      expect(result).not.toBeNull();
+      if (!result || result.lyrics.type !== "line") {
+        throw new Error("Expected result to be parsed as LineData");
+      }
+
+      expect(result.meta).toEqual({});
+      expect(result.lyrics.start).toBe(1000);
+      expect(result.lyrics.end).toBe(4000); // Taken from the last line's endTimeMs
+
+      const content = result.lyrics.parts[0].content;
+      expect(content).toHaveLength(3);
+
+      expect(content[0]).toMatchObject({ start: 1000, end: 2000, text: "Hello" });
+      expect(content[1]).toMatchObject({ start: 2000, end: 3000, text: "world" });
+      expect(content[2]).toMatchObject({ start: 3000, end: 4000, text: "this is a test" });
+    });
+
+    it("drops filler lines like ♪ and empty/whitespace strings", () => {
+      const mockLyrics = {
+        syncType: "LINE_SYNCED",
+        lines: [
+          { startTimeMs: "1000", words: "Valid line" },
+          { startTimeMs: "2000", words: "♪" },
+          { startTimeMs: "3000", words: "   " },
+          { startTimeMs: "4000", words: "" },
+          { startTimeMs: "5000", words: "Another valid line", endTimeMs: "6000" },
+        ],
+      };
+
+      const result = parseSpotifyLyrics(mockLyrics as never);
+
+      if (!result || result.lyrics.type !== "line") {
+        throw new Error("Expected result to be parsed as LineData");
+      }
+
+      const content = result.lyrics.parts[0].content;
+
+      // Should only keep the 2 valid lines
+      expect(content).toHaveLength(2);
+      expect(content[0].text).toBe("Valid line");
+
+      expect(content[0].end).toBe(2000);
+
+      expect(content[1].text).toBe("Another valid line");
+      expect(content[1].end).toBe(6000);
+    });
+
+    it("handles an empty lines array safely", () => {
+      const mockLyrics = {
+        syncType: "LINE_SYNCED",
+        lines: [],
+      };
+
+      const result = parseSpotifyLyrics(mockLyrics as never);
+
+      if (!result || result.lyrics.type !== "line") {
+        throw new Error("Expected result to be parsed as LineData");
+      }
+
+      expect(result.lyrics.start).toBe(0);
+      expect(result.lyrics.end).toBe(0);
+      expect(result.lyrics.parts[0].content).toEqual([]);
+    });
+
+    it("falls back to startTimeMs for global end if last line lacks endTimeMs", () => {
+      const mockLyrics = {
+        syncType: "LINE_SYNCED",
+        lines: [
+          { startTimeMs: "1000", words: "Only line" }, // no endTimeMs
+        ],
+      };
+
+      const result = parseSpotifyLyrics(mockLyrics as never);
+
+      if (!result || result.lyrics.type !== "line") {
+        throw new Error("Expected result to be parsed as LineData");
+      }
+
+      expect(result.lyrics.start).toBe(1000);
+      expect(result.lyrics.end).toBe(1000); // Falls back to startTimeMs
+      expect(result.lyrics.parts[0].content[0].end).toBe(1000);
+    });
+  });
+
+  describe("When syncType is UNSYNCED (or other)", () => {
+    it("parses unsynced lyrics into a static structure", () => {
+      const mockLyrics = {
+        syncType: "UNSYNCED",
+        lines: [{ words: "Static line one" }, { words: "Static line two" }],
+      };
+
+      const result = parseSpotifyLyrics(mockLyrics as never);
+
+      expect(result).not.toBeNull();
+      if (!result || result.lyrics.type !== "static") {
+        throw new Error("Expected result to be parsed as StaticData");
+      }
+
+      expect(result.meta).toEqual({});
+      expect(result.lyrics.lines).toHaveLength(2);
+      expect(result.lyrics.lines[0]).toMatchObject({ text: "Static line one" });
+      expect(result.lyrics.lines[1]).toMatchObject({ text: "Static line two" });
+    });
+
+    it("handles an empty lines array for static lyrics safely", () => {
+      const mockLyrics = {
+        syncType: "UNSYNCED",
+        lines: [],
+      };
+
+      const result = parseSpotifyLyrics(mockLyrics as never);
+
+      if (!result || result.lyrics.type !== "static") {
+        throw new Error("Expected result to be parsed as StaticData");
+      }
+
+      expect(result.lyrics.lines).toEqual([]);
+    });
+  });
+});

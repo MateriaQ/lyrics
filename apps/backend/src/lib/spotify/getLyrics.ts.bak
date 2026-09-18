@@ -1,0 +1,166 @@
+import env from "@/env";
+import { getValidToken } from "@/lib/spotify/auth";
+import type { SpotifyResult, SpotifyLyricsResponse, Lyrics } from "@/lib/spotify/types";
+import { HTTP_CODES } from "@/lib/http";
+import type { LineData, LyricsMetadata, StaticData } from "@/lib/lyrics/schema";
+
+const LYRICS_BASE = "https://spclient.wg.spotify.com/color-lyrics/v2/track/";
+
+export async function getSpotifyLyrics(
+  trackId: string,
+  imageUrl?: string | null,
+  token?: string | null,
+): Promise<SpotifyResult<SpotifyLyricsResponse>> {
+  if (!token) {
+    const res = await getValidToken(env.SP_DC);
+    if (!res.success) return res;
+    if (res.data) token = res.data.token;
+  }
+
+  let path = trackId;
+  if (imageUrl) {
+    try {
+      const imageId = new URL(imageUrl).pathname.split("/").pop();
+      if (imageId) {
+        path += `/image/${encodeURIComponent(`spotify:image:${imageId}`)}`;
+      }
+    } catch {}
+  }
+
+  const url = `${LYRICS_BASE}${path}?format=json&market=from_token`;
+
+  try {
+    // fallow-ignore-next-line security-sink -- hostname is constant spclient.wg.spotify.com
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        "App-platform": "WebPlayer",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
+        // "spotify-app-version": "1.2.89.402.gde3ac00d",
+      },
+      signal: AbortSignal.timeout(env.FETCH_TIMEOUT),
+    });
+
+    if (response.status === HTTP_CODES.NOT_FOUND) {
+      return {
+        success: false,
+        code: "NOT_FOUND",
+        message: "Lyrics for this track were not found.",
+      };
+    }
+
+    if (response.status === HTTP_CODES.TOO_MANY_REQUESTS) {
+      return {
+        success: false,
+        code: "RATE_LIMITED",
+        message: "Rate limited by Spotify. Please try again later.",
+      };
+    }
+
+    if (response.status === HTTP_CODES.UNAUTHORIZED || response.status === HTTP_CODES.FORBIDDEN) {
+      return {
+        success: false,
+        code: "AUTH_FAILED",
+        message: "Spotify token is invalid or expired.",
+      };
+    }
+
+    if (!response.ok) {
+      return {
+        success: false,
+        code: "API_ERROR",
+        message: `Spotify API error: ${response.statusText}`,
+      };
+    }
+
+    const data = (await response.json()) as SpotifyLyricsResponse;
+
+    if (!data?.lyrics) {
+      return {
+        success: false,
+        code: "NOT_FOUND",
+        message: "Spotify returned an empty lyrics response.",
+      };
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    return {
+      success: false,
+      code: "INTERNAL_ERROR",
+      message: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+type ParsedLyrics = { lyrics: LineData | StaticData; meta: LyricsMetadata };
+
+export function parseSpotifyLyrics(lyrics: Lyrics): ParsedLyrics | null {
+  const meta: LyricsMetadata = {};
+
+  const lines = lyrics.lines;
+  const len = lines?.length || 0;
+
+  if (lyrics.syncType === "LINE_SYNCED") {
+    if (len === 0) {
+      return {
+        lyrics: { type: "line", start: 0, end: 0, parts: [{ content: [] }] } satisfies LineData,
+        meta,
+      };
+    }
+
+    const lastLine = lines[len - 1]!;
+    const start = +(lines[0]?.startTimeMs || 0);
+    const end = +(lastLine.endTimeMs || lastLine.startTimeMs || 0);
+
+    const content = [];
+    for (let i = 0; i < len; i++) {
+      const current = lines[i]!;
+      const next = lines[i + 1];
+
+      const trimmed = current.words.trim();
+      if (!trimmed || trimmed === "♪") continue;
+
+      content.push({
+        start: +(current.startTimeMs || 0),
+        end: next ? +(next.startTimeMs || 0) : end,
+        text: current.words,
+      });
+    }
+
+    const safeStart = start || (content.length > 0 ? content[0]!.start : 0);
+    const safeEnd = end || (content.length > 0 ? content[content.length - 1]!.end : 0);
+
+    return {
+      lyrics: {
+        type: "line",
+        start: safeStart,
+        end: safeEnd,
+        parts: [{ content }],
+      } satisfies LineData,
+      meta,
+    };
+  }
+
+  if (len === 0) {
+    return {
+      lyrics: { type: "static", lines: [] } satisfies StaticData,
+      meta,
+    };
+  }
+
+  const staticLines = [];
+  for (let i = 0; i < len; i++) {
+    staticLines.push({ text: lines[i]!.words });
+  }
+
+  return {
+    lyrics: {
+      type: "static",
+      lines: staticLines,
+    } satisfies StaticData,
+    meta,
+  };
+}

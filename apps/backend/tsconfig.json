@@ -1,0 +1,12 @@
+{
+  "extends": "@workspace/typescript-config/elysia",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@root/*": ["./*"],
+      "@test/*": ["./test/*"]
+    }
+  },
+  "include": ["src", "scripts", "test", "*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

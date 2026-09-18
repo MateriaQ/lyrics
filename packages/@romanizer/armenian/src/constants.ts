@@ -1,0 +1,106 @@
+/**
+ * Mapping between individual Armenian characters and their Latin equivalents.
+ */
+export const ARM_TO_LAT_MAP: Record<string, string> = {
+  Ա: "a",
+  Բ: "b",
+  Գ: "g",
+  Դ: "d",
+  Ե: "e",
+  Զ: "z",
+  Է: "e",
+  Ը: "ə",
+  Թ: "t",
+  Ժ: "zh",
+  Ի: "i",
+  Լ: "l",
+  Խ: "kh",
+  Ծ: "ts",
+  Կ: "k",
+  Հ: "h",
+  Ձ: "dz",
+  Ղ: "gh",
+  Ճ: "ch",
+  Մ: "m",
+  Յ: "y",
+  Ն: "n",
+  Շ: "sh",
+  Ո: "o",
+  Չ: "ch",
+  Պ: "p",
+  Ջ: "j",
+  Ռ: "r",
+  Ս: "s",
+  Վ: "v",
+  Տ: "t",
+  Ր: "r",
+  Ց: "ts",
+  Ւ: "u",
+  Փ: "p",
+  Ք: "k",
+  Օ: "o",
+  Ֆ: "f",
+  ա: "a",
+  բ: "b",
+  գ: "g",
+  դ: "d",
+  ե: "e",
+  զ: "z",
+  է: "e",
+  ը: "ə",
+  թ: "t",
+  ժ: "zh",
+  ի: "i",
+  լ: "l",
+  խ: "kh",
+  ծ: "ts",
+  կ: "k",
+  հ: "h",
+  ձ: "dz",
+  ղ: "gh",
+  ճ: "ch",
+  մ: "m",
+  յ: "y",
+  ն: "n",
+  շ: "sh",
+  ո: "o",
+  չ: "ch",
+  պ: "p",
+  ջ: "j",
+  ռ: "r",
+  ս: "s",
+  վ: "v",
+  տ: "t",
+  ր: "r",
+  ց: "ts",
+  ւ: "u",
+  փ: "p",
+  ք: "k",
+  օ: "o",
+  ֆ: "f",
+};
+
+/**
+ * Temporary symbols for multi-character sequences like "ու" and "և".
+ * We convert them temporarily to symbols that are not otherwise used in Armenian
+ * so that they are processed as single "characters" when we map them to Latin.
+ */
+export const TEMP_SYMBOLS_MAP: {
+  forward: Record<string, string>;
+  backward: Record<string, string>;
+} = {
+  backward: {
+    // Once we see these temporary symbols, map them to their Latin equivalents.
+    "\u00A4": "ev",
+    "\u2042": "u",
+  },
+  forward: {
+    // Map these sequences to temporary symbols for later processing.
+    Եւ: "\u00A4",
+    ՈՒ: "\u2042",
+    Ու: "\u2042",
+    եւ: "\u00A4",
+    ու: "\u2042",
+    և: "\u00A4",
+  },
+};
